@@ -1,0 +1,52 @@
+﻿{
+    "success": true,
+    "children": [{
+        "name": "Russia",
+        "prop": "propname",
+        "children": [{
+                "name": "Moscow",
+                "prop": "propname",
+                "leaf": true
+        }, {
+                "name": "Saint Petersburg",
+                "prop": "propname",
+                "leaf": true
+        }]
+    }, {
+        "name": "Greece",
+        "prop": "propname",
+        "children": [{
+                "name": "Atina",
+                "prop": "propname",
+                "leaf": true
+        }, {
+                "name": "Solon",
+                "prop": "propname",
+                "leaf": true
+        }]
+    }, {
+        "name": "Turkey",
+        "prop": "propname",
+        "children": [{
+                "name": "Istanbul",
+                "prop": "propname",
+                "leaf": true
+        }, {
+                "name": "Ankara",
+                "prop": "propname",
+                "leaf": true
+        }]
+    }, {
+        "name": "Belgium",
+        "prop": "propname",
+        "children": [{
+                "name": "Ghent",
+                "prop": "propname",
+                "leaf": true
+        }, {
+                "name": "Brussel",
+                "prop": "propname",
+                "leaf": true
+        }]
+    }]
+}

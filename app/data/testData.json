@@ -1,0 +1,19 @@
+﻿{
+    "result": [{
+        "name": "Bulgaria",
+        "prop": "bg",
+        "children": [{
+            "name": "Sofia",
+            "prop": "sf",
+            "leaf": true
+        }]
+    }, {
+        "name": "Canada",
+        "prop": "cd",
+        "leaf": true
+    }, {
+        "name": "Brazil",
+        "prop": "br",
+        "leaf": true
+    }]
+}
