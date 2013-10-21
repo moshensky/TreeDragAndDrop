@@ -14,7 +14,7 @@
             ptype: 'treeviewdragdrop',
             enableDrop: true,
             enableDrag: true,
-            allowContainerDrop: true
+            allowContainerDrops: true
         }
     },
 

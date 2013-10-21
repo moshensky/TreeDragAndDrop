@@ -8,6 +8,7 @@
     autoSync: true,
     proxy: {
         type: 'direct',
+        batchActions: false,
         api: {
             create: Ext.php.Server.create,
             read: Ext.php.Server.readData,

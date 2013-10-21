@@ -1,16 +1,19 @@
 /// <reference path="../../ext/ext-all-dev.js" />
 Ext.define('TreeDragAndDrop.controller.TreesControler', {
     extend: 'TreeDragAndDrop.controller.Base',
+    requires: [
+     'TreeDragAndDrop.view.tree.RecordWindow'
+    ],
     init: function () {
         this.listen({
             controller: {
             },
             component: {
                 'tree button[action=addnode]': {
-                    click: this.addNode
+                    click: this.onAddNode
                 },
                 'tree button[action=addsubnode]': {
-                    click: this.addSubNode
+                    click: this.onAddSubNode
                 },
                 'tree button[action=removenode]': {
                     click: function (button) {
@@ -32,6 +35,24 @@ Ext.define('TreeDragAndDrop.controller.TreesControler', {
                 },
                 'tree form': {
                     formfieldblur: this.editRecord
+                },
+                'recordwindow button[action=addNode]': {
+                    click: this.createNewNode
+                },
+                'recordwindow button[action=addSubNode]': {
+                    click: this.createNewSubNode
+                },
+                'tree > treeview': {
+                    beforedrop: function (node, data, overModel, dropPosition, dropHandler, eOpts) {
+                        // destroy node
+                        data.records[0].remove();
+                        // mark as phantom to force invoking create method
+                        //data.records[0].phantom = true;
+                        this.markPhantom(data.records[0]);
+
+
+                        //var sourceStore = data.view.up('tree').getStore();
+                    }
                 }
             },
             global: {},
@@ -39,7 +60,32 @@ Ext.define('TreeDragAndDrop.controller.TreesControler', {
         });
 
     },
-    isAddBtnPressed: false,
+    markPhantom: function (record) {
+        record.phantom = true;
+        if (record.childNodes.length > 0) {
+            Ext.each(record.childNodes, function (rec) {
+                this.markPhantom(rec);
+            }, this);
+        }
+    },
+    onAddNode: function (button) {
+        var win = this.addNodeWindow || (this.addNodeWindow = Ext.widget('recordwindow', {
+            title: 'Add new product',
+            btnAction: 'addNode'
+        }));
+        win.button = button;
+        win.down('form').getForm().reset();
+        win.show();
+    },
+    onAddSubNode: function (button) {
+        var win = this.addSubNodeWindow || (this.addSubNodeWindow = Ext.widget('recordwindow', {
+            title: 'Add new sub product',
+            btnAction: 'addSubNode'
+        }));
+        win.button = button;
+        win.down('form').getForm().reset();
+        win.show();
+    },
     editRecord: function (form, record) {
         this.getSelectedRecord({
             treeChildComponent: form,
@@ -51,9 +97,11 @@ Ext.define('TreeDragAndDrop.controller.TreesControler', {
             }
         });
     },
-    addNode: function (button, event, eOpts) {
+    createNewNode: function () {
+        var form = this.addNodeWindow.down('form');
+        var button = this.addNodeWindow.button;
         var treePanel = button.up('treepanel');
-        var form = treePanel.down('form');
+        var self = this;
         if (form.isValid()) {
             var record = Ext.create('TreeDragAndDrop.model.Product');
             form.updateRecord(record);
@@ -71,11 +119,15 @@ Ext.define('TreeDragAndDrop.controller.TreesControler', {
                     treePanel.getRootNode().appendChild(record);
                 }
             });
+
+            self.addNodeWindow.hide();
         }
     },
-    addSubNode: function (button, event, eOpts) {
+    createNewSubNode: function () {
+        var form = this.addSubNodeWindow.down('form');
+        var button = this.addSubNodeWindow.button;
         var treePanel = button.up('treepanel');
-        var form = treePanel.down('form');
+        var self = this;
         if (form.isValid()) {
             this.getSelectedRecord({
                 treeChildComponent: button,
@@ -90,6 +142,7 @@ Ext.define('TreeDragAndDrop.controller.TreesControler', {
                     }
 
                     selectedRecord.appendChild(record);
+                    self.addSubNodeWindow.hide();
                 },
                 failure: function () {
                     Ext.Msg.alert('Click', 'Please select root node first!');

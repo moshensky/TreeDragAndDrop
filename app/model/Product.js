@@ -6,6 +6,6 @@
        { name: 'id', type: 'string' },
 
        //{ name: 'expanded', type: 'boolean', defaultValue: true, persist: false },
-       //{ name: 'index', type: 'int' }
+       { name: 'index', type: 'int' }
     ]
 });
